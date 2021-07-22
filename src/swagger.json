@@ -1,0 +1,288 @@
+{
+  "openapi": "3.0.0",
+  "info":{
+    "title": "ATLAS",
+    "description": "This is a Documentation of ATLAS API",
+    "version":"1.0.0",
+    "contact":{
+      "email":"andreluis16@gmail.com"
+    }
+  },
+  "paths":{
+    "/users":{
+      "post":{
+        "tags": ["Users"],
+        "summary":"Create a new user",
+        "description":"Create a new user",
+        "requestBody":{
+          "content": {
+            "application/json":{
+              "schema":{
+                "type":"object",
+                "properties":{
+                  "name":{
+                    "type":"string"
+                  },
+                  "email":{
+                    "type":"string"
+                  }
+                },
+                "example":{
+                  "name":"Username",
+                  "email":"username@username.com"
+                }
+              }
+            }
+         }
+        }, 
+        "responses":{
+          "201":{
+            "description":"Created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"Object",
+                  "properties":{
+                    "admin":{"type":"boolean"},
+                    "id":{"type":"string"},
+                    "name":{"type":"string"},
+                    "email":{"type":"string"},
+                    "created_at":{"type":"string"},
+                    "updated_at":{"type":"string"}
+                  },
+                  "example":{
+                    "admin": false,
+                    "id": "2dfcdbac-dd0a-458f-a547-865100702e27",
+                    "name": "Username",
+                    "email": "username@username.com",
+                    "created_at": "2021-07-07T00:54:09.671Z",
+                    "updated_at": "2021-07-07T00:54:09.671Z"
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "User Already Exists !!!",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "error":{
+                      "type":"string"
+                    }
+                  },
+                  "example":{
+                    "error":"User Already Exists !!!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }, 
+      "get":{
+        "tags":["Users"],
+        "summary": "List all Users",
+        "description":"List all Users",
+        "parameters":[{
+            "name":"user_id",
+            "in":"header",
+            "description":"Admin ID",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            },
+            "style":"simple"
+          }]
+        ,
+        "responses":{
+          "200":{
+            "description":"Success",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "admin":{"type":"boolean"},
+                    "id":{"type":"string"},
+                    "name":{"type":"string"},
+                    "email":{"type":"string"},
+                    "created_at":{"type":"string"},
+                    "updated_at":{"type":"string"}
+                  },
+                  "example":[
+                    {
+                      "admin": false,
+                      "id": "8b868380-3b73-40cc-9691-b2c75903dbab",
+                      "name": "Username",
+                      "email": "username@username.com",
+                      "created_at": "2021-07-07T01:01:54.574Z",
+                      "updated_at": "2021-07-07T01:01:54.574Z"
+                    },
+                    {
+                      "admin": true,
+                      "id": "5fb04d6d-68e2-408e-b84c-9ca5012a985c",
+                      "name": "User",
+                      "email": "user@user.com",
+                      "created_at": "2021-07-07T01:02:09.838Z",
+                      "updated_at": "2021-07-07T01:02:25.639Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "User is not a Admin !!!",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "error":{
+                      "type":"string"
+                    }
+                  },
+                  "example":{
+                    "error":"User is not a Admin !!!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}":{
+      "get":{
+        "tags": ["Users"],
+        "summary":"Get current user Profile",
+        "description":"Get user current Profile",
+        "parameters":[{
+          "name":"user_id",
+          "in":"path",
+          "description":"The sample user ID",
+          "required":true,
+          "schema":{
+            "type":"string",
+            "format":"uuid"
+          },
+          "style":"simple"
+        }], 
+        "responses":{
+          "200":{
+            "description":"Sucess",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "admin":{"type":"boolean"},
+                    "id":{"type":"string"},
+                    "name":{"type":"string"},
+                    "email":{"type":"string"},
+                    "created_at":{"type":"string"},
+                    "updated_at":{"type":"string"}
+                  },
+                  "example":{
+                    "admin": false,
+                    "id": "8b868380-3b73-40cc-9691-b2c75903dbac",
+                    "name": "Username",
+                    "email": "username@username.com",
+                    "created_at": "2021-07-07T01:01:54.574Z",
+                    "updated_at": "2021-07-07T01:01:54.574Z"
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User Information not found",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "error":{
+                      "type":"string"
+                    }
+                  },
+                  "example":{
+                    "error":"User Information not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin":{
+      "patch":{
+        "tags": ["Users"],
+        "summary":"Turn an user to Admin",
+        "description":"Turn an user to Admin",
+        "parameters":[{
+          "name":"user_id",
+          "in":"path",
+          "description":"The sample user ID",
+          "required":true,
+          "schema":{
+            "type":"string",
+            "format":"uuid"
+          },
+          "style":"simple"
+        }], 
+        "responses":{
+          "200":{
+            "description":"Sucess",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "admin":{"type":"boolean"},
+                    "id":{"type":"string"},
+                    "name":{"type":"string"},
+                    "email":{"type":"string"},
+                    "created_at":{"type":"string"},
+                    "updated_at":{"type":"string"}
+                  },         
+                  "example":{
+                    "admin": false,
+                    "id": "8b868380-3b73-40cc-9691-b2c75903dbac",
+                    "name": "Username",
+                    "email": "username@username.com",
+                    "created_at": "2021-07-07T01:01:54.574Z",
+                    "updated_at": "2021-07-07T01:01:54.574Z"
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User ID not found !!!",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "error":{
+                      "type":"string"
+                    }
+                  },
+                  "example":{
+                    "error":"User ID not found !!!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
