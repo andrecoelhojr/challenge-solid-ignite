@@ -12,11 +12,11 @@ class ListAllUsersUseCase {
     const user = this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new Error(`this ${user_id} invalid`);
+      throw new Error(`User invalid`);
     }
 
     if (!user.admin) {
-      throw new Error(`this ${user.name} not is admin`);
+      throw new Error(`User not is admin`);
     }
 
     return this.usersRepository.list();
